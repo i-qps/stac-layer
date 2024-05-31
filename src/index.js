@@ -84,6 +84,7 @@ async function addOverviewAssetForFeature(feature, layerGroup, crossOrigin, erro
 
   const { asset } = getOverviewAsset(feature.assets);
   if (isImageType(asset.type)) {
+    console.log("addOverviewAssetForFeature");
     const lyr = await imageOverlay(
       asset.href,
       [
@@ -109,6 +110,7 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
 
   const { asset } = findAsset(feature.assets, "thumbnail");
   if (isImageType(asset.type)) {
+    console.log("addThumbnailAssetForFeature");
     const lyr = await imageOverlay(
       asset.href,
       [
@@ -374,6 +376,7 @@ const stacLayer = async (data, options = {}) => {
         if (debugLevel >= 2) console.log("[stac-layer] overview's href is:", href);
 
         if (isImageType(type)) {
+          console.log("stacLayer: overviewLayer");
           const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
           if (overviewLayer !== null) {
             bindDataToClickEvent(overviewLayer, asset);
@@ -422,6 +425,7 @@ const stacLayer = async (data, options = {}) => {
         const href = toAbsoluteHref(asset.href);
 
         if (isImageType(type)) {
+          console.log("stacLayer: thumbLayer");
           const thumbLayer = await imageOverlay(href, bounds, options.crossOrigin);
           if (thumbLayer !== null) {
             bindDataToClickEvent(thumbLayer, data);
@@ -445,6 +449,7 @@ const stacLayer = async (data, options = {}) => {
         const href = toAbsoluteHref(preview.href);
 
         if (isImageType(type)) {
+          console.log("stacLayer: previewLayer");
           const previewLayer = await imageOverlay(href, bounds, options.crossOrigin);
           if (previewLayer !== null) {
             bindDataToClickEvent(previewLayer, data);
@@ -585,6 +590,7 @@ const stacLayer = async (data, options = {}) => {
         );
       }
 
+      console.log("stacLayer: lyr");
       const lyr = await imageOverlay(href, bounds, options.crossOrigin);
       if (lyr !== null) {
         bindDataToClickEvent(lyr);
