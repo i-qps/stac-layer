@@ -10,8 +10,7 @@ export default async function imageOverlayDistortable(url, crossOrigin, options)
     } catch {
       return null;
     }
-    // const lyr = L.distortableImageOverlay(img, options);
-    const lyr = L.imageOverlay(img, options);
+    const lyr = L.distortableImageOverlay(img, options);
     return lyr;
   } catch {
     return null;
