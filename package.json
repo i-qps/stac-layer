@@ -69,6 +69,7 @@
     "georaster-layer-for-leaflet": "^3.7.1",
     "get-depth": "^0.0.3",
     "leaflet": "^1.8.0",
+    "leaflet-distortableimage": "^0.21.9",
     "reproject-geojson": "^0.2.0",
     "urijs": "^1.19.11"
   },
