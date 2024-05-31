@@ -10,6 +10,7 @@ import bboxToLatLngBounds from "./utils/bboxToLatLngBounds.js";
 import bboxLayer from "./utils/bboxLayer.js";
 import findAsset from "./utils/find-asset.js";
 import imageOverlay from "./utils/image-overlay.js";
+import imageOverlayDistortable from "./utils/image-overlay-distortable.js";
 import tileLayer from "./utils/tile-layer.js";
 import isBoundingBox from "./utils/is-bounding-box.js";
 import getBoundingBox from "./utils/get-bounding-box.js";
@@ -111,13 +112,16 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
   const { asset } = findAsset(feature.assets, "thumbnail");
   if (isImageType(asset.type)) {
     console.log("addThumbnailAssetForFeature");
-    const lyr = await imageOverlay(
+    // const lyr = await imageOverlay(
+    //   asset.href,
+    //   [
+    //     [feature.bbox[1], feature.bbox[0]],
+    //     [feature.bbox[3], feature.bbox[2]]
+    //   ],
+    //   crossOrigin
+    // );
+    const lyr = await imageOverlayDistortable(
       asset.href,
-      [
-        [feature.bbox[1], feature.bbox[0]],
-        [feature.bbox[3], feature.bbox[2]]
-      ],
-      crossOrigin
     );
     if (lyr === null) {
       if (errorCallback) errorCallback();
