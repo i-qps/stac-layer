@@ -120,6 +120,7 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
     //   ],
     //   crossOrigin
     // );
+    console.log(feature.geometry);
     const lyr = await imageOverlayDistortable(
       asset.href,
     );
@@ -382,6 +383,7 @@ const stacLayer = async (data, options = {}) => {
         if (isImageType(type)) {
           console.log("stacLayer: overviewLayer");
           // const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          console.log(data.geometry);
           const overviewLayer =  await imageOverlayDistortable(
             asset.href,
           );
