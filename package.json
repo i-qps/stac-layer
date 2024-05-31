@@ -20,6 +20,7 @@
     "src/utils/find-asset.js",
     "src/utils/get-bounding-box.js",
     "src/utils/image-overlay.js",
+    "src/utils/image-overlay-distortable.js",
     "src/utils/is-bounding-box.js",
     "src/utils/is-relative.js",
     "src/utils/pick.js",
