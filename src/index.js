@@ -381,7 +381,10 @@ const stacLayer = async (data, options = {}) => {
 
         if (isImageType(type)) {
           console.log("stacLayer: overviewLayer");
-          const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          // const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          const overviewLayer =  await imageOverlayDistortable(
+            asset.href,
+          );
           if (overviewLayer !== null) {
             bindDataToClickEvent(overviewLayer, asset);
             // there probably aren't eo:bands attached to an overview
