@@ -394,12 +394,6 @@ const stacLayer = async (data, options = {}) => {
             asset.href,
             {
               crossOrigin: false,
-              corners: [
-                L.latLng(coordinates[0][1],coordinates[0][0]),
-                L.latLng(coordinates[1][1],coordinates[1][0]),
-                L.latLng(coordinates[2][1],coordinates[2][0]),
-                L.latLng(coordinates[3][1],coordinates[3][0]),
-              ],
             },
           );
           if (overviewLayer !== null) {
