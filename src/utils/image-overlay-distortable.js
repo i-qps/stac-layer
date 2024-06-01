@@ -3,7 +3,7 @@ import "leaflet-toolbar";
 import "leaflet-distortableimage";
 import loadImage from "easy-image-loader";
 
-export default async function imageOverlayDistortable(url, crossOrigin, options) {
+export default async function imageOverlayDistortable(url, options) {
   try {
     const timeout = 5 * 1000; // 5 seconds
     let img = null;
