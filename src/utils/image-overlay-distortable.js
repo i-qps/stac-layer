@@ -1,5 +1,6 @@
-// import L from "leaflet";
-import * as L from 'leaflet-distortableimage';
+import L from "leaflet";
+import "leaflet-toolbar";
+import "leaflet-distortableimage";
 import loadImage from "easy-image-loader";
 
 export default async function imageOverlayDistortable(url, crossOrigin, options) {
