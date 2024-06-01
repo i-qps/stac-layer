@@ -124,6 +124,7 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
     console.log(feature.geometry.coordinates);
     const lyr = await imageOverlayDistortable(
       asset.href,
+      crossOrigin,
     );
     if (lyr === null) {
       if (errorCallback) errorCallback();
@@ -387,6 +388,7 @@ const stacLayer = async (data, options = {}) => {
           console.log("data.geometry");
           const overviewLayer =  await imageOverlayDistortable(
             asset.href,
+            options.crossOrigin,
           );
           if (overviewLayer !== null) {
             bindDataToClickEvent(overviewLayer, asset);
