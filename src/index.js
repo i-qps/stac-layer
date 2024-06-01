@@ -386,6 +386,7 @@ const stacLayer = async (data, options = {}) => {
           console.log("stacLayer: overviewLayer");
           // const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
           console.log("data.geometry");
+          console.log(data.geometry);
           const overviewLayer =  await imageOverlayDistortable(
             asset.href,
             options.crossOrigin,
