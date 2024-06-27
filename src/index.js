@@ -85,7 +85,6 @@ async function addOverviewAssetForFeature(feature, layerGroup, crossOrigin, erro
 
   const { asset } = getOverviewAsset(feature.assets);
   if (isImageType(asset.type)) {
-    console.log("addOverviewAssetForFeature");
     const lyr = await imageOverlay(
       asset.href,
       [
@@ -111,23 +110,24 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
 
   const { asset } = findAsset(feature.assets, "thumbnail");
   if (isImageType(asset.type)) {
-    console.log("addThumbnailAssetForFeature");
-    // const lyr = await imageOverlay(
-    //   asset.href,
-    //   [
-    //     [feature.bbox[1], feature.bbox[0]],
-    //     [feature.bbox[3], feature.bbox[2]]
-    //   ],
-    //   crossOrigin
-    // );
-    console.log("feature.geometry");
-    console.log(feature.geometry.coordinates);
-    const lyr = await imageOverlayDistortable(
-      asset.href,
-      {
-        crossOrigin: false,
-      },
-    );
+    let lyr;
+    if (!data.properties['sar:product_type'].includes('L1.1')) {
+      lyr = await imageOverlay(
+        asset.href,
+        [
+          [feature.bbox[1], feature.bbox[0]],
+          [feature.bbox[3], feature.bbox[2]]
+        ],
+        crossOrigin
+      );
+    } else {
+      lyr = await imageOverlayDistortable(
+        asset.href,
+        {
+          crossOrigin: false,
+        },
+      );
+    }
     if (lyr === null) {
       if (errorCallback) errorCallback();
       return;
@@ -385,23 +385,25 @@ const stacLayer = async (data, options = {}) => {
         if (debugLevel >= 2) console.log("[stac-layer] overview's href is:", href);
 
         if (isImageType(type)) {
-          console.log("stacLayer: overviewLayer");
-          // const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
-          console.log("data.geometry");
-          console.log(data.geometry.coordinates);
-          const coordinates = data.geometry.coordinates;
-          const overviewLayer =  await imageOverlayDistortable(
-            asset.href,
-            {
-              crossOrigin: false,
-              corners: [
-                L.latLng(coordinates[0][3][1],coordinates[0][3][0]),
-                L.latLng(coordinates[0][2][1],coordinates[0][2][0]),
-                L.latLng(coordinates[0][0][1],coordinates[0][0][0]),
-                L.latLng(coordinates[0][1][1],coordinates[0][1][0]),
-              ],
-            },
-          );
+          // FIXME
+          let overviewLayer;
+          if (!data.properties['sar:product_type'].includes('L1.1')) {
+            overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          } else {
+            const coordinates = data.geometry.coordinates;
+            overviewLayer =  await imageOverlayDistortable(
+              asset.href,
+              {
+                crossOrigin: false,
+                corners: [
+                  L.latLng(coordinates[0][3][1],coordinates[0][3][0]),
+                  L.latLng(coordinates[0][2][1],coordinates[0][2][0]),
+                  L.latLng(coordinates[0][0][1],coordinates[0][0][0]),
+                  L.latLng(coordinates[0][1][1],coordinates[0][1][0]),
+                ],
+              },
+            );
+          }
           if (overviewLayer !== null) {
             bindDataToClickEvent(overviewLayer, asset);
             // there probably aren't eo:bands attached to an overview
@@ -449,7 +451,6 @@ const stacLayer = async (data, options = {}) => {
         const href = toAbsoluteHref(asset.href);
 
         if (isImageType(type)) {
-          console.log("stacLayer: thumbLayer");
           const thumbLayer = await imageOverlay(href, bounds, options.crossOrigin);
           if (thumbLayer !== null) {
             bindDataToClickEvent(thumbLayer, data);
@@ -473,7 +474,6 @@ const stacLayer = async (data, options = {}) => {
         const href = toAbsoluteHref(preview.href);
 
         if (isImageType(type)) {
-          console.log("stacLayer: previewLayer");
           const previewLayer = await imageOverlay(href, bounds, options.crossOrigin);
           if (previewLayer !== null) {
             bindDataToClickEvent(previewLayer, data);
@@ -614,7 +614,6 @@ const stacLayer = async (data, options = {}) => {
         );
       }
 
-      console.log("stacLayer: lyr");
       const lyr = await imageOverlay(href, bounds, options.crossOrigin);
       if (lyr !== null) {
         bindDataToClickEvent(lyr);
