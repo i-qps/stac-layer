@@ -10,6 +10,7 @@ import bboxToLatLngBounds from "./utils/bboxToLatLngBounds.js";
 import bboxLayer from "./utils/bboxLayer.js";
 import findAsset from "./utils/find-asset.js";
 import imageOverlay from "./utils/image-overlay.js";
+import imageOverlayDistortable from "./utils/image-overlay-distortable.js";
 import tileLayer from "./utils/tile-layer.js";
 import isBoundingBox from "./utils/is-bounding-box.js";
 import getBoundingBox from "./utils/get-bounding-box.js";
@@ -109,14 +110,31 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
 
   const { asset } = findAsset(feature.assets, "thumbnail");
   if (isImageType(asset.type)) {
-    const lyr = await imageOverlay(
-      asset.href,
-      [
-        [feature.bbox[1], feature.bbox[0]],
-        [feature.bbox[3], feature.bbox[2]]
-      ],
-      crossOrigin
-    );
+    let lyr;
+    if (!feature.properties['sar:product_type'].includes('L1.1')) {
+      lyr = await imageOverlay(
+        asset.href,
+        [
+          [feature.bbox[1], feature.bbox[0]],
+          [feature.bbox[3], feature.bbox[2]]
+        ],
+        crossOrigin
+      );
+    } else {
+      const coordinates = feature.geometry.coordinates;
+      lyr =  await imageOverlayDistortable(
+        asset.href,
+        {
+          crossOrigin: false,
+          corners: [
+            L.latLng(coordinates[0][3][1],coordinates[0][3][0]),
+            L.latLng(coordinates[0][2][1],coordinates[0][2][0]),
+            L.latLng(coordinates[0][0][1],coordinates[0][0][0]),
+            L.latLng(coordinates[0][1][1],coordinates[0][1][0]),
+          ],
+        },
+      );
+    }
     if (lyr === null) {
       if (errorCallback) errorCallback();
       return;
@@ -374,7 +392,25 @@ const stacLayer = async (data, options = {}) => {
         if (debugLevel >= 2) console.log("[stac-layer] overview's href is:", href);
 
         if (isImageType(type)) {
-          const overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          // FIXME
+          let overviewLayer;
+          if (!data.properties['sar:product_type'].includes('L1.1')) {
+            overviewLayer = await imageOverlay(href, bounds, options.crossOrigin);
+          } else {
+            const coordinates = data.geometry.coordinates;
+            overviewLayer =  await imageOverlayDistortable(
+              asset.href,
+              {
+                crossOrigin: false,
+                corners: [
+                  L.latLng(coordinates[0][3][1],coordinates[0][3][0]),
+                  L.latLng(coordinates[0][2][1],coordinates[0][2][0]),
+                  L.latLng(coordinates[0][0][1],coordinates[0][0][0]),
+                  L.latLng(coordinates[0][1][1],coordinates[0][1][0]),
+                ],
+              },
+            );
+          }
           if (overviewLayer !== null) {
             bindDataToClickEvent(overviewLayer, asset);
             // there probably aren't eo:bands attached to an overview

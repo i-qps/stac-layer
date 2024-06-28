@@ -20,6 +20,7 @@
     "src/utils/find-asset.js",
     "src/utils/get-bounding-box.js",
     "src/utils/image-overlay.js",
+    "src/utils/image-overlay-distortable.js",
     "src/utils/is-bounding-box.js",
     "src/utils/is-relative.js",
     "src/utils/pick.js",
@@ -69,6 +70,7 @@
     "georaster-layer-for-leaflet": "^3.7.1",
     "get-depth": "^0.0.3",
     "leaflet": "^1.8.0",
+    "leaflet-distortableimage": "git+ssh://git@github.com:publiclab/Leaflet.DistortableImage.git#v0.17.7",
     "reproject-geojson": "^0.2.0",
     "urijs": "^1.19.11"
   },
