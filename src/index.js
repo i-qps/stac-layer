@@ -111,7 +111,7 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
   const { asset } = findAsset(feature.assets, "thumbnail");
   if (isImageType(asset.type)) {
     let lyr;
-    if (!data.properties['sar:product_type'].includes('L1.1')) {
+    if (!feature.properties['sar:product_type'].includes('L1.1')) {
       lyr = await imageOverlay(
         asset.href,
         [
