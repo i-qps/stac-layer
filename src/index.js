@@ -122,7 +122,7 @@ async function addThumbnailAssetForFeature(feature, layerGroup, crossOrigin, err
       );
     } else {
       const coordinates = feature.geometry.coordinates;
-      overviewLayer =  await imageOverlayDistortable(
+      lyr =  await imageOverlayDistortable(
         asset.href,
         {
           crossOrigin: false,
